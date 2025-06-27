@@ -1,10 +1,10 @@
-# 🔢 Hex Keypad Scanner (Grayhill 4x4) – Verilog Implementation
+# Hex Keypad Scanner (Grayhill 4x4) – Verilog Implementation
 
 This project presents a fully elaborated Verilog design and simulation setup for interfacing with a 4x4 hexadecimal matrix keypad, such as the Grayhill 96 series. It models the digital logic behavior of a keypad scanning FSM (Finite State Machine), featuring input synchronization, keypress decoding, debouncing strategy, and comprehensive testbench validation. Designed to run on FPGA-based development platforms, the project is simulation-ready using Icarus Verilog and GTKWave.
 
 ---
 
-## 📁 Project File Structure
+## Project File Structure
 
 * `Row_Signal.v` – Combinational module that detects the active row from key and column inputs.
 * `Synchronizer.v` – Double flip-flop design that synchronizes asynchronous row signals.
@@ -14,15 +14,15 @@ This project presents a fully elaborated Verilog design and simulation setup for
 
 ---
 
-## 🔧 Modules Breakdown and Functionality
+## Modules Breakdown and Functionality
 
-### 🔹 `Row_Signal`
+### `Row_Signal`
 
 This module is purely combinational. It observes the current active column and checks the 16-bit input `Key` (representing the 4x4 keypad layout). For each row, it asserts a bit in the output `Row[3:0]` if any key in that row is pressed in conjunction with the currently active column.
 
 > Example: If `Col[1]` is active and `Key[5]` is high (representing row 1, column 1), then `Row[1]` becomes high.
 
-### 🔹 `Synchronizer`
+### `Synchronizer`
 
 Handles the conversion of potentially asynchronous row activity into a stable, clocked signal that the FSM can safely process. It uses a classic two-stage flip-flop approach:
 
@@ -31,7 +31,7 @@ Handles the conversion of potentially asynchronous row activity into a stable, c
 
 This ensures metastability mitigation before FSM interaction.
 
-### 🔹 `Hex_Keypad_Grayhill_072`
+### `Hex_Keypad_Grayhill_072`
 
 This is the main FSM which performs the following operations:
 
@@ -48,7 +48,7 @@ It outputs:
 
 FSM uses one-hot state encoding (`S_0` through `S_5`) to reduce decoding complexity.
 
-### 🔹 `Hex_Keypad_tb`
+### `Hex_Keypad_tb`
 
 A highly detailed testbench written to emulate real-world usage of the keypad. Each of the 16 keys (`K0–K15`) is independently declared to facilitate waveform debugging. It:
 
@@ -59,17 +59,17 @@ A highly detailed testbench written to emulate real-world usage of the keypad. E
 
 ---
 
-## 🧪 Simulation & Validation Goals
+##  Simulation & Validation Goals
 
-* ✅ Confirm FSM transitions and logic under clean and noisy input conditions
-* ✅ Validate correctness of `Code` output based on key location
-* ✅ Confirm proper synchronization via `S_Row` signal
-* ✅ Test debounce logic and rejection of spurious transitions
-* ✅ Ensure proper FSM hold behavior under prolonged press
+* Confirm FSM transitions and logic under clean and noisy input conditions
+* Validate correctness of `Code` output based on key location
+* Confirm proper synchronization via `S_Row` signal
+* Test debounce logic and rejection of spurious transitions
+* Ensure proper FSM hold behavior under prolonged press
 
 ---
 
-## 🚦 FSM State Definitions
+## FSM State Definitions
 
 | State | Binary | Purpose                                       |
 | ----- | ------ | --------------------------------------------- |
@@ -84,7 +84,7 @@ FSM logic uses sequential advancement and resets to `S_0` after key release.
 
 ---
 
-## 📷 Waveform Visualization Strategy
+## Waveform Visualization Strategy
 
 * Each key (`K0` through `K15`) is declared separately in the testbench.
 * This allows direct inspection and toggling in GTKWave.
@@ -98,25 +98,25 @@ FSM logic uses sequential advancement and resets to `S_0` after key release.
 
 ---
 
-## 💡 AHA Moments & Learning Reflections
+## AHA Moments & Learning Reflections
 
 These realizations emerged during implementation and debugging:
 
-* ✅ `wire` is for real-time combinational paths; it doesn't retain state.
-* ✅ `reg` is used for storage, representing sequential logic behavior.
-* ✅ Double D flip-flops delay and stabilize input from mechanical buttons.
-* ✅ `<=` models real-world clocked flip-flop behavior; `=` is for immediate logic updates.
-* ✅ `parameter` improves readability and reuse by labeling constants.
-* ✅ One-hot FSM encoding simplifies state decoding at the cost of more flip-flops.
-* ✅ `$monitor` provides real-time trace of signal values on the console.
-* ✅ `#` delays in testbenches allow simulation time control (not equivalent to real clock cycles).
-* ✅ Continuous assignment (`assign`) can only target `wire` types, not `reg`.
-* ✅ Synchronizers are critical when bridging asynchronous domains (e.g., keypad signals to FSM).
-* ✅ Avoiding metastability is essential for predictable logic design.
+* `wire` is for real-time combinational paths; it doesn't retain state.
+* `reg` is used for storage, representing sequential logic behavior.
+* Double D flip-flops delay and stabilize input from mechanical buttons.
+* `<=` models real-world clocked flip-flop behavior; `=` is for immediate logic updates.
+* `parameter` improves readability and reuse by labeling constants.
+* One-hot FSM encoding simplifies state decoding at the cost of more flip-flops.
+* `$monitor` provides real-time trace of signal values on the console.
+* `#` delays in testbenches allow simulation time control (not equivalent to real clock cycles).
+* Continuous assignment (`assign`) can only target `wire` types, not `reg`.
+* Synchronizers are critical when bridging asynchronous domains (e.g., keypad signals to FSM).
+* Avoiding metastability is essential for predictable logic design.
 
 ---
 
-## 🔍 Keypad Mapping Table (Row, Col → Hex Code)
+## Keypad Mapping Table (Row, Col → Hex Code)
 
 | Row | Col | Binary (Row, Col) | Key Code |
 | --- | --- | ----------------- | -------- |
@@ -139,7 +139,7 @@ These realizations emerged during implementation and debugging:
 
 ---
 
-## 🔬 Technical Summary
+## Technical Summary
 
 This Verilog design showcases practical digital design techniques:
 
@@ -153,13 +153,13 @@ It emulates real-world embedded keypad behavior as used in calculators, access p
 
 ---
 
-## 📦 How to Build & Run Simulation
+## How to Build & Run Simulation
 
-### 📌 Prerequisites
+### Prerequisites
 
 Install [Icarus Verilog](http://iverilog.icarus.com/) and [GTKWave](http://gtkwave.sourceforge.net/).
 
-### ▶️ Simulation Steps
+### Simulation Steps
 
 ```bash
 # Compile all modules and the testbench
@@ -174,6 +174,6 @@ gtkwave dump.vcd
 
 ---
 
-## 👤 Author
+## Author
 **Kourosh Rashidiyan**
-🗓️ June 2025
+**June 2025**
